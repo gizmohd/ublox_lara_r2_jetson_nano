@@ -34,8 +34,7 @@ class Ublox_lara_r2():
         GPIO.output(self.reset_pin, False)
        
         self.enable_rtscts()
-        self.start_receive_handle()
-        
+  
     
     def enable_rtscts(self):
         #os.system("rpirtscts on")
@@ -50,34 +49,40 @@ class Ublox_lara_r2():
 
     def pwr_key_trigger(self):
         GPIO.output(self.power_pin, True)
-        time.sleep(1.0)
+        time.sleep(5.0)
         GPIO.output(self.power_pin, False)
 
-    def handle_receive(self):        
-        while True == self.keep_receive_alive:                     
-            if self.comm.readable():                
-                line = self.comm.readline()
-                self.response += line
-                if self.debug:
-                    print("<"+line,)
+    def send(self, cmd, timeout=2):
+        # flush all output data
+        self.comm.flushOutput()
 
-    def start_receive_handle(self):
-        thread.start_new_thread(self.handle_receive, ())
-    
-    # def 
-    def send(self, cmd):        
-        self.response = ""
-        self.comm.write(cmd)
+        # initialize the timer for timeout
+        t0 = time.time()
+        dt = 0
+
+        # send the command to the serial port
+        self.comm.write(cmd+'\r')
+
+        # wait until answer within the alotted time
+        while ser.inWaiting()==0 and time.time()-t0<timeout:
+            pass
+
         if self.debug:        
             print("\r\n>" + cmd)
-        
+
+        n = self.comm.inWaiting()
+        if n>0:
+            return ser.read(n)
+        else:
+            return None
+
 
     def sendAT(self, cmd, response = None, timeout=1):        
         self.cmd_done=False
         self.response = ""
         attempts = timeout 
         while not self.cmd_done and attempts >= 0:            
-            self.comm.write(cmd)
+            self.response = send(cmd)
             if self.debug:
                 print('\r\n>'+cmd,)
             time.sleep(0.5)
