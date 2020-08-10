@@ -4,13 +4,13 @@ import os, sys
 import thread
 import serial
 import time
-#from gpiozero import LED
+import Jetson.GPIO as GPIO
 
 class Ublox_lara_r2():
-    def __init__(self, port = "/dev/ttyAMA0", baudrate = 115200):
+    def __init__(self, port = "/dev/ttyS0", baudrate = 115200):
         self.cmd_done = False
-        #self.power_pin = LED(5)
-        #self.reset_pin = LED(6)
+        self.power_pin = 29
+        self.reset_pin = 31
         self.keep_receive_alive = True        
         self.debug = True
         self.response = ""
@@ -24,36 +24,31 @@ class Ublox_lara_r2():
 
        
     def initialize(self):
-        #self.power_pin.off()
-        #self.reset_pin.off()
-        os.system("raspi-gpio set 17 op")
-        os.system("raspi-gpio set 16 op")
-        os.system("raspi-gpio set 6 op")
-        os.system("raspi-gpio set 5 op")
-        os.system("raspi-gpio set 5 dl")
-        os.system("raspi-gpio set 6 dl")
-        os.system("raspi-gpio set 17 dl")
-        os.system("raspi-gpio set 16 dl")
-        self.disabel_rtscts()
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setwarnings(False)
+        GPIO.setup(self.power_pin, GPIO.OUT) # Setup module power pin
+        GPIO.setup(self.reset_pin, GPIO.OUT) # Setup module reset pin 
+        GPIO.output(self.power_pin, False)
+        GPIO.output(self.reset_pin, False)
+        self.enable_rtscts()
         self.start_receive_handle()
         
     
     def enable_rtscts(self):
-        #os.system("rpirtscts on")
+        os.system("rpirtscts on")
         if self.debug:
             print("rts cts on")
 
 
     def disabel_rtscts(self):
-        #os.system("rpirtscts off")
+        os.system("rpirtscts off")
         if self.debug:
             print("rts cts off")
 
     def pwr_key_trigger(self):
-        #self.power_pin.on()
-        #time.sleep(1.0)
-        #self.power_pin.off()
-        pass
+        GPIO.output(self.power_pin, True)
+        time.sleep(1.0)
+        GPIO.output(self.power_pin, False)
 
     def handle_receive(self):        
         while True == self.keep_receive_alive:                     
