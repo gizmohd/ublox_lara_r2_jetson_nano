@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/python
 
 import os, sys
 import thread
@@ -7,7 +7,7 @@ import time
 import Jetson.GPIO as GPIO
 
 class Ublox_lara_r2():
-    def __init__(self, port = "/dev/ttyACM2", baudrate = 115200):
+    def __init__(self, port = "/dev/ttyACM0", baudrate = 115200):
         self.cmd_done = False
         self.power_pin = 29
         self.reset_pin = 31
