@@ -7,7 +7,7 @@ import time
 import Jetson.GPIO as GPIO
 
 class Ublox_lara_r2():
-    def __init__(self, port = "/dev/ttyACM0", baudrate = 115200):
+    def __init__(self, port = "/dev/ttyACM2", baudrate = 115200):
         self.cmd_done = False
         self.power_pin = 29
         self.reset_pin = 31
@@ -121,3 +121,12 @@ class Ublox_lara_r2():
             print('\r\n')
         self.debug = True
 
+    def send_sms(self, phone_num, msg):
+        if self.__phonenum == None:
+            return False
+        if self.sendAT('AT+CMGF=1\r\n'):
+            print(self.response)
+        if self.sendAT('AT+CMGS="{}"'.format(phone_num)):
+            print(self.response)
+        if self.sendAT(msg):
+            print(self.response)

@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from ublox_lara_r2 import *
 
 u = Ublox_lara_r2()
@@ -18,3 +20,5 @@ if u.sendAT("AT+CPIN?\r\n", "OK\r\n"):
 # check rssi
 rssi = u.getRSSI()
 print "RSSI: ", rssi
+
+u.send_sms("-----", "Hello D!")
