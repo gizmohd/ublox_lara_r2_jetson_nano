@@ -82,7 +82,7 @@ class Ublox_lara_r2():
         self.response = ""
         attempts = timeout 
         while not self.cmd_done and attempts >= 0:            
-            self.response = send(cmd)
+            self.response = self.send(cmd)
             if self.debug:
                 print('\r\n>'+cmd,)
             time.sleep(0.5)
