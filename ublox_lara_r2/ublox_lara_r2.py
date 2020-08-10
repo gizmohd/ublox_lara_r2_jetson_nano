@@ -30,13 +30,9 @@ class Ublox_lara_r2():
         GPIO.setwarnings(False)
         GPIO.setup(self.power_pin, GPIO.OUT) # Setup module power pin
         GPIO.setup(self.reset_pin, GPIO.OUT) # Setup module reset pin 
-        GPIO.setup(self.gpio17_pin, GPIO.OUT) # Setup module power pin
-        GPIO.setup(self.gpio16_pin, GPIO.OUT) # Setup module reset pin 
         GPIO.output(self.power_pin, False)
         GPIO.output(self.reset_pin, False)
-        GPIO.output(self.gpio17_pin, False)
-        GPIO.output(self.gpio16_pin, False)
-
+       
         self.enable_rtscts()
         self.start_receive_handle()
         
