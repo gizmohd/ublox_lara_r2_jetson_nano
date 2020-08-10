@@ -64,7 +64,7 @@ class Ublox_lara_r2():
         self.comm.write(cmd+'\r')
 
         # wait until answer within the alotted time
-        while ser.inWaiting()==0 and time.time()-t0<timeout:
+        while self.comm.inWaiting()==0 and time.time()-t0<timeout:
             pass
 
         if self.debug:        
@@ -72,7 +72,7 @@ class Ublox_lara_r2():
 
         n = self.comm.inWaiting()
         if n>0:
-            return ser.read(n)
+            return self.comm.read(n)
         else:
             return None
 
@@ -98,7 +98,7 @@ class Ublox_lara_r2():
 
     def getRSSI(self):
         rssi = ""
-        self.sendAT("AT+CSQ\r\n", 'OK\r\n')
+        self.sendAT("AT+CSQ", 'OK\r\n')
         if self.response != "":
             parts = self.response.split('\r\n')
             # print parts
@@ -113,9 +113,9 @@ class Ublox_lara_r2():
         #self.debug = False
         print "waking up...",
         sys.stdout.flush()
-        if not self.sendAT("AT\r\n", "OK\r\n"):
+        if not self.sendAT("AT", "OK\r\n"):
             self.pwr_key_trigger()            
-            while not self.sendAT("AT\r\n", 'OK\r\n'):
+            while not self.sendAT("AT", 'OK\r\n'):
                 print '...',
                 sys.stdout.flush()
             print('\r\n')
