@@ -35,13 +35,13 @@ class Ublox_lara_r2():
         
     
     def enable_rtscts(self):
-        os.system("rpirtscts on")
+        #os.system("rpirtscts on")
         if self.debug:
             print("rts cts on")
 
 
     def disabel_rtscts(self):
-        os.system("rpirtscts off")
+        #os.system("rpirtscts off")
         if self.debug:
             print("rts cts off")
 
@@ -56,7 +56,7 @@ class Ublox_lara_r2():
                 line = self.comm.readline()
                 self.response += line
                 if self.debug:
-                    print '<'+line,
+                    print("<"+line,)
 
     def start_receive_handle(self):
         thread.start_new_thread(self.handle_receive, ())
@@ -66,7 +66,7 @@ class Ublox_lara_r2():
         self.response = ""
         self.comm.write(cmd)
         if self.debug:        
-            print "\r\n>" + cmd
+            print("\r\n>" + cmd)
         
 
     def sendAT(self, cmd, response = None, timeout=1):        
@@ -76,7 +76,7 @@ class Ublox_lara_r2():
         while not self.cmd_done and attempts >= 0:            
             self.comm.write(cmd)
             if self.debug:
-                print '\r\n>'+cmd,
+                print('\r\n>'+cmd,)
             time.sleep(0.5)
             if None != response:            
                 if self.response.find(response)>=0:
@@ -102,7 +102,7 @@ class Ublox_lara_r2():
         return rssi
 
     def reset_power(self):
-        self.debug = False
+        #self.debug = False
         print "waking up...",
         sys.stdout.flush()
         if not self.sendAT("AT\r\n", "OK\r\n"):
@@ -110,6 +110,6 @@ class Ublox_lara_r2():
             while not self.sendAT("AT\r\n", 'OK\r\n'):
                 print '...',
                 sys.stdout.flush()
-            print '\r\n'
+            print('\r\n')
         self.debug = True
 
