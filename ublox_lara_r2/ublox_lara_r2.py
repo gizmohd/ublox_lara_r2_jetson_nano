@@ -122,7 +122,7 @@ class Ublox_lara_r2():
         self.debug = True
 
     def send_sms(self, phone_num, msg):
-        if self.__phonenum == None:
+        if phone_num == None:
             return False
         if self.sendAT('AT+CMGF=1\r\n'):
             print(self.response)
