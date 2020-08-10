@@ -16,7 +16,7 @@ class Ublox_lara_r2():
         self.keep_receive_alive = True        
         self.debug = True
         self.response = ""
-
+        print("Opening Serial Port: "+ port)
         self.comm = serial.Serial(port, baudrate)
    
     def __del__(self):
